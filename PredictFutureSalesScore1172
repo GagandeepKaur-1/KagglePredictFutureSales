@@ -1,0 +1,158 @@
+import numpy as np
+import pandas as pd
+import os
+
+os.getcwd()
+
+os.chdir("C:\\Users\\gurme\\OneDrive\\Documents\\Documents\\Gagan\\DS\\DS\\Python\\Kaggle Comps\\PredictFutureSales")
+
+train=pd.read_csv("sales_train.csv")
+
+test=pd.read_csv("test.csv")
+
+train.head
+
+
+train.columns
+
+median = train[(train.shop_id==32)&(train.item_id==2973)&(train.date_block_num==4)&(train.item_price>0)].item_price.median()
+train.loc[train.item_price<0, 'item_price'] = median
+
+train["Sales_Amt"]=train["item_price"]*train["item_cnt_day"]
+
+train.columns
+
+test.columns
+
+
+
+len(list(set(test.item_id) - set(test.item_id).intersection(set(train.item_id)))), len(list(set(test.item_id))), len(test)
+
+len(list(set(test.shop_id) - set(test.shop_id).intersection(set(train.shop_id)))), len(list(set(test.shop_id))), len(test)
+
+train["Sales_Amt"].head
+
+train.columns
+
+group=train.groupby(["shop_id",'item_id']).agg({'item_cnt_day': ['sum']})
+
+group1=train.groupby(["shop_id",'item_id']).agg("Sales_Amt")
+
+group1.head(10)
+
+len(group1)
+
+group1.columns = ['Sales_Amt']
+group.reset_index(inplace=True)
+
+group1.head()
+
+group = train.groupby(['date_block_num','shop_id','item_id']).agg({'item_cnt_day': ['sum']})
+group.columns = ['item_cnt_month']
+group.reset_index(inplace=True)
+
+train_y=train["Sales_Amt"]
+
+train.drop(["Sales_Amt"],1,inplace=True)
+
+test.columns
+
+train.columns
+
+train1=train.drop(["date", 'date_block_num','item_price','item_cnt_day'],1)
+
+from sklearn.linear_model import LinearRegression
+
+lr=LinearRegression()
+
+train.columns
+
+train1.columns
+train1.shape
+
+test1.columns
+test1=test.drop(["ID"],1)
+
+test1.columns
+test1.shape
+
+lr.fit(train1,train_y)
+
+predictions=lr.predict(test1)
+
+predictions1=pd.DataFrame(predictions)
+
+predictions1.to_csv("PredictFutureSales.csv")
+
+train_date=pd.read_csv("sales_train.csv")
+
+test_date=pd.read_csv("test.csv")
+
+train_date.columns
+
+train_date1=train_date.drop(['date_block_num','item_price','item_cnt_day'],1)
+
+train_date1.columns
+
+train_date1.head()
+
+b = train_date1.date
+
+b.columns=["date"]
+
+b.head()
+
+b = pd.to_datetime(b)
+
+b.dtypes
+
+m= b.dt.to_period("M")
+
+len(b),len(m),len(train)
+
+train_date1.columns
+
+m.dtypes
+
+m1=pd.DataFrame(m)
+
+train_month1=pd.concat([train_month,m1],1)
+train_month1.columns
+train_month1.head()
+train_month1.columns=["date","shop_id","item_id","item_price","item_cnt_day","Sales_Amt","Month"]
+
+train_month1
+
+groupby_month=train_month1.groupby("Month").sum("Sales_Amt")
+groupby_month
+groupby_month.reset_index(inplace=True)
+groupby_month.dtypes
+groupby_month
+
+len(list(set(test.item_id) - set(test.item_id).intersection(set(train.item_id)))), len(list(set(test.item_id))), len(test)
+
+predictions1.head()
+#predictions1 is the predictions we made earlier and found the predicted sales amt according 
+
+test.shape
+
+len(predictions1)
+
+test_SalesAmt=pd.concat([test,predictions1],1)
+
+test_with_price_SalesAmt
+
+predictions1.head
+
+predictions1.columns=["item_cnt_month"]
+
+predictions1["ID"]=range(0,214200)
+
+predictions1.head()
+
+predict=pd.DataFrame({"ID":predictions1["ID"],"item_cnt_month":predictions1["item_cnt_month"]})
+
+predict.to_csv("PredictFutureSalesAttempt2.csv")
+
+# Deleted index column in excel and saved with same name and submitted it. 
+
